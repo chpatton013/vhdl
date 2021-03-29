@@ -15,6 +15,8 @@
 --   standard default.
 -- * g_stop_width: Stop-bit widths may be 1 or 2, however 1 is the standard
 --   default.
+-- * g_buffer_depth: The number of flip-flops to buffer signals through while
+--   waiting for metastability events to resolve.
 --
 -- Ports:
 --
@@ -35,7 +37,8 @@ entity uart is
     g_clock_rate: positive;
     g_baud_rate: positive := 9600;
     g_data_width: positive range 5 to 9 := 8;
-    g_stop_width: positive range 1 to 2 := 1
+    g_stop_width: positive range 1 to 2 := 1;
+    g_buffer_depth: positive range 2 to 3 := 2
   );
   port (
     i_clock: in std_logic := '0';
@@ -53,7 +56,19 @@ entity uart is
 end uart;
 
 architecture rtl of uart is
+  signal r_stable_rx_serial: std_logic := '0';
 begin
+
+  serial: entity work.stabilized_signal
+    generic map (
+      g_buffer_depth => g_buffer_depth
+    )
+    port map (
+      i_clock => i_clock,
+      i_reset => i_reset,
+      i_signal => i_rx_serial,
+      o_signal => r_stable_rx_serial
+    );
 
   rx: entity work.uart_rx
     generic map (
@@ -65,7 +80,7 @@ begin
     port map (
       i_clock => i_clock,
       i_reset => i_reset,
-      i_serial => i_rx_serial,
+      i_serial => r_stable_rx_serial,
       o_active => o_rx_active,
       o_valid => o_rx_valid,
       o_error => o_rx_error,

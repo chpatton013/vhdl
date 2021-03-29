@@ -11,6 +11,7 @@ architecture test of uart_test is
   constant c_baud_period: time := 1 sec / c_baud_rate;
   constant c_data_width: positive := 8;
   constant c_stop_width: positive := 1;
+  constant c_buffer_depth: positive := 2;
 
   signal r_clock, r_reset, r_serial: std_logic := '0';
   signal r_rx_active, r_rx_valid, r_rx_error: std_logic := '0';
@@ -23,7 +24,8 @@ begin
       g_clock_rate => c_clock_rate,
       g_baud_rate => c_baud_rate,
       g_data_width => c_data_width,
-      g_stop_width => c_stop_width
+      g_stop_width => c_stop_width,
+      g_buffer_depth => c_buffer_depth
     )
     port map (
       i_clock => r_clock,
