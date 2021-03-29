@@ -7,23 +7,6 @@ entity uart_tx_test is end uart_tx_test;
 
 architecture test of uart_tx_test is
 
-  component uart_tx is
-    generic (
-      g_clock_rate: positive;
-      g_baud_rate: positive := 9600;
-      g_data_width: positive range 5 to 9 := 8;
-      g_stop_width: positive range 1 to 2 := 1
-    );
-    port (
-      i_clock: in std_logic := '0';
-      i_reset: in std_logic := '0';
-      i_valid: in std_logic := '0';
-      i_chunk: in std_logic_vector(g_data_width - 1 downto 0) := (others => '0');
-      o_serial: out std_logic := '0';
-      o_active: out std_logic := '0'
-    );
-  end component;
-
   constant c_baud_rate: positive := 9600;
   constant c_baud_period: time := 1 sec / c_baud_rate;
   constant c_data_width: positive := 8;
@@ -108,7 +91,7 @@ architecture test of uart_tx_test is
   end procedure;
 
 begin
-  uart_tx_0: uart_tx
+  uart_tx_0: entity work.uart_tx
     generic map (
       g_clock_rate => c_clock_rate,
       g_baud_rate => c_baud_rate,
