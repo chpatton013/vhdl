@@ -7,6 +7,7 @@
 --
 -- Generics:
 --
+-- * g_clock_rate: The clock rate of the domain this entity operates in.
 -- * g_baud_rate: Standard baud rates are 110, 300, 600, 1200, 2400, 4800, 9600,
 --   14400, 19200, 38400, 57600, 115200, 128000 and 256000 bits per second. By
 --   default, 9600 is commonly chosen for low-speed applications. Higher speeds
